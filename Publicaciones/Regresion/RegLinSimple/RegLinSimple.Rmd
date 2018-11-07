@@ -1,0 +1,38 @@
+---
+output:
+  github_document:
+    includes:
+      in_header: header.md
+      after_body: doc_suffix.md
+---
+
+```{r, echo = FALSE}
+knitr::opts_chunk$set(collapse=TRUE, comment="##", fig.retina=2, fig.path = "MyFigs/Figure-")
+```
+
+## Introducción
+En esta publicación se mostrará como usar las herramientas de R para ajustar un modelo de regresión lineal simple.
+
+## Modelo estadístico
+El modelo estadístico en regresión lineal simple se puede escribir de dos formas como se muestra a continuación.
+
+- Modelo 1: en esta forma la variable respuesta $y$ se expresa como una suma de $\beta_0 + \beta_1 x_i$ y un error aleatorio $e_i$ el cual tiene distribución $N(0, \sigma^2)$.
+\begin{align} \label{mod1}
+y_i &= \beta_0 + \beta_1 x_i + e_i, \\ 
+e_i &\sim N(0, \sigma^2)
+\end{align}
+
+- Modelo 2: en esta forma la variable respuesta $y$ tiene distribución $N(\beta_0 + \beta_1 x_i, \sigma^2)$.
+\begin{align} \label{mod2}
+y_i &\sim N(\mu_i, \sigma^2), \\ 
+\mu_i &= \beta_0 + \beta_1 x_i, \\
+\sigma^2 &= \text{constante}
+\end{align}
+
+En cualquiera de los dos casos anteriores el vector de parámetros del modelo es $\boldsymbol{\theta}=(\beta_0, \beta_1, \sigma)^\top$. 
+
+# Datos para el ejemplo
+Para el ejemplo vamos a utilizar los datos disponibles en el objeto `softdrink` del paquete `MPV` que acompaña al libro [Introduction to Linear Regression Analysis](https://www.amazon.com/Introduction-Regression-Analysis-Douglas-Montgomery/dp/0470542810/ref=sr_1_1?s=books&ie=UTF8&qid=1513908927&sr=1-1&refinements=p_27%3AMontgomery+%2F+Peck+%2F+Vining).
+
+Los datos `softdrink` corresponden al tiempo ($y$) que un empleado demora para revisar y surtir una máquina dispensadora en función de la cantidad de cajas ($x$) que surte a la máquina, abajo una figura ilustrativa de la situación.
+
