@@ -49,12 +49,12 @@ require(MASS)
 dt <- mvrnorm(n=1000, mu=centro, Sigma)
 head(dt)  # para ver las primeras lineas
 ##          [,1]     [,2]
-## [1,] 74.61053 221.7393
-## [2,] 77.31307 191.9773
-## [3,] 72.14056 218.8369
-## [4,] 65.57305 162.3402
-## [5,] 73.10978 195.3081
-## [6,] 69.25958 149.7200
+## [1,] 72.57532 209.6547
+## [2,] 71.34494 163.8081
+## [3,] 70.35195 167.9928
+## [4,] 72.97807 199.0353
+## [5,] 72.76288 163.1691
+## [6,] 62.11650 138.5495
 ```
 
 Para crear el diagrama de dispersión y superponer la elipse usamos el siguiente código.
@@ -71,10 +71,10 @@ Para determinar el porcentaje de puntos que están dentro de la elipse podemos u
 ``` r
 d <- mahalanobis(x=dt, center=centro, cov=Sigma)
 mean(d <= qchisq(p=0.95, df=2))
-## [1] 0.944
+## [1] 0.938
 ```
 
-Vemos que 94.4% de los puntos están dentro lo cual es un valor muy cercano al valor nominal de la elipse de 95%.
+Vemos que 93.8% de los puntos están dentro lo cual es un valor muy cercano al valor nominal de la elipse de 95%.
 
 Por último vamos a dibujar los puntos que están por dentro de la elipse con color azul y los que están por fuera con color rojo.
 
@@ -86,4 +86,20 @@ lines(p, lwd=2)
 
 <img src="MyFigs/Figure-elipse3-1.png" width="672" />
 
-<strong>Cuidado!</strong> Se debe verificar que la muestra aleatoria provenga de una población normal multivariada. Aquí vamos a asumir que este supuesto se cumple.
+``` r
+stop('This should break!')
+```
+
+**Error** in eval(expr, envir, enclos): This should break!
+
+``` r
+warning('Watch out!')
+```
+
+**Warning** Watch out!
+
+``` r
+message('This is a message for you')
+```
+
+This is a message for you

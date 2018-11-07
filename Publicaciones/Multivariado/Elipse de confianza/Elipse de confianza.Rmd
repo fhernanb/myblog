@@ -71,7 +71,28 @@ plot(dt, pch=19, col=c('blue', 'red')[fuera], xlab='x1', ylab='x2')
 lines(p, lwd=2)
 ```
 
-<div class="alert alert-danger">
-  <strong>Cuidado!</strong> Se debe verificar que la muestra aleatoria provenga de una población normal multivariada. Aquí vamos a asumir que este supuesto se cumple.
-</div>
+```{r setup, include=FALSE}
+knitr::knit_hooks$set(
+   error = function(x, options) {
+     paste('\n\n<div class="alert alert-danger">',
+           gsub('##', '\n', gsub('^##\ Error', '**Error**', x)),
+           '</div>', sep = '\n')
+   },
+   warning = function(x, options) {
+     paste('\n\n<div class="alert alert-warning">',
+           gsub('##', '\n', gsub('^##\ Warning:', '**Warning**', x)),
+           '</div>', sep = '\n')
+   },
+   message = function(x, options) {
+     paste('\n\n<div class="alert alert-info">',
+           gsub('##', '\n', x),
+           '</div>', sep = '\n')
+   }
+)
+```
 
+```{r oneliners, error = TRUE}
+stop('This should break!')
+warning('Watch out!')
+message('This is a message for you')
+```
