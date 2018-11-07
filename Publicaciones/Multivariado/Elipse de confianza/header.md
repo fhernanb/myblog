@@ -12,10 +12,8 @@ img {
 </head>
 <body>
 
-<h2>Center an Image</h2>
-<p>To center an image, set left and right margin to auto, and make it into a block element.</p>
 
-<img src="https://raw.githubusercontent.com/fhernanb/fhernanb.github.io/master/imagenes/logounal.png" alt="Paris" style="width:50%;">
+<img src="https://raw.githubusercontent.com/fhernanb/fhernanb.github.io/master/imagenes/logounal.png" alt="Paris" width="200"">
 
 </body>
 </html>
