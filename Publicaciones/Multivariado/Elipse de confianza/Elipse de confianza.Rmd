@@ -1,0 +1,18 @@
+---
+output: rmarkdown::github_document
+---
+
+```{r, echo = FALSE}
+knitr::opts_chunk$set(collapse=TRUE, comment="##", fig.retina=2, fig.path = "MyFigs/Figure-")
+```
+
+# ¿Cómo se construye una elipse de confianza para una normal bivariada?
+
+Vamos a definir el vector de medias $\boldsymbol{\mu}$ y la matriz de covarianzas $\boldsymbol{\Sigma}$ así:
+
+```{r}
+centro <- c(70, 170)
+Sigma <- matrix(c(20, 100,
+                  100, 1000), ncol=2, nrow=2)
+```
+
