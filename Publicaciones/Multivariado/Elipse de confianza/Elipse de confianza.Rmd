@@ -7,9 +7,23 @@ knitr::opts_chunk$set(collapse=TRUE, comment="##", fig.retina=2, fig.path = "MyF
 ```
 
 # ¿Cómo se construye una elipse de confianza para una normal bivariada?
-En muchos problemas prácticos con 2 variables se necesita crear una elipse de confianza para monitorear.
+Existen varias funciones para dibujar elipses de confianza pero en esta publicación vamos a mostar la utilidad de la función `ellipse` del paquete [ellipse](https://cran.r-project.org/web/packages/ellipse/index.html).
 
-Vamos a definir el vector de medias $\boldsymbol{\mu}$ y la matriz de covarianzas $\boldsymbol{\Sigma}$ para la cual queremos crear la elipse; el código a usar se muestra a continuación.
+```{r, message=FALSE}
+require(ellipse)
+```
+
+La estructura de la función `ellipse` es la siguiente:
+
+```{r, eval=FALSE}
+ellipse(x, scale = c(1, 1), centre=c(0, 0), level=0.95, 
+        t=sqrt(qchisq(level, 2)), which=c(1, 2), npoints=100, ...)
+```
+
+## Ejemplo 1
+Vamos a contruir una elipse de confianza del 95% para una distribución normal bivariada con la siguiente estructura: $\boldsymbol{\mu}=(70, 170)^\top$, $\sigma_1^2=20$, $\sigma_2^2=1000$ y $\sigma_{12}=100$. 
+
+Lo primero que debemos hacer es definir el vector de medias $\boldsymbol{\mu}$ y la matriz de covarianzas $\boldsymbol{\Sigma}$ para la cual queremos crear la elipse; el código a usar se muestra a continuación.
 
 ```{r}
 centro <- c(70, 170)
@@ -17,12 +31,14 @@ Sigma <- matrix(c(20, 100,
                   100, 1000), ncol=2, nrow=2)
 ```
 
+Luego usamos la función `elipse` e ingresando la matriz de covarianzas en el argumento `x`, el vector de medias en `centre` y la confianza requerida en `level`. A continuacón el código necesario para crear la elipse.
 
-
-```{r, message=FALSE}
-require(ellipse)
-level <- 0.95
-p <- ellipse(x=Sigma, centre=centro, level=level)
-plot(p, type = 'l', lwd=2)
+```{r elipse1, message=FALSE}
+p <- ellipse(x=Sigma, centre=centro, level=0.95)
+plot(p, type='l', lwd=2)
 ```
+
+
+
+
 
