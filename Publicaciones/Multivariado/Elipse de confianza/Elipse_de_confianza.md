@@ -55,12 +55,12 @@ require(MASS)
 dt <- mvrnorm(n=1000, mu=centro, Sigma)
 head(dt)  # para ver las primeras lineas
 ##          [,1]     [,2]
-## [1,] 71.55371 170.3362
-## [2,] 70.76903 155.6034
-## [3,] 68.77607 221.2328
-## [4,] 66.55037 174.9372
-## [5,] 70.78160 185.2613
-## [6,] 68.15984 130.2109
+## [1,] 70.76193 159.7577
+## [2,] 68.50980 122.3227
+## [3,] 75.74504 207.2794
+## [4,] 69.23913 155.2680
+## [5,] 80.01348 196.0117
+## [6,] 72.50871 214.1097
 ```
 
 Para crear el diagrama de dispersión y superponer la elipse usamos el siguiente código.
@@ -77,10 +77,10 @@ Para determinar el porcentaje de puntos que están dentro de la elipse podemos u
 ``` r
 d <- mahalanobis(x=dt, center=centro, cov=Sigma)
 mean(d <= qchisq(p=0.95, df=2))
-## [1] 0.949
+## [1] 0.945
 ```
 
-Vemos que 94.9% de los puntos están dentro lo cual es un valor muy cercano al valor nominal de la elipse de 95%.
+Vemos que 94.5% de los puntos están dentro lo cual es un valor muy cercano al valor nominal de la elipse de 95%.
 
 Por último vamos a dibujar los puntos que están por dentro de la elipse con color azul y los que están por fuera con color rojo.
 
@@ -91,3 +91,6 @@ lines(p, lwd=2)
 ```
 
 <img src="MyFigs/Figure-elipse3-1.png" width="672" />
+
+<hr>
+<p align="center"> Fin </p>

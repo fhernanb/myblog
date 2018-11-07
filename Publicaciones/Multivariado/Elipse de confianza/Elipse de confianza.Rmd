@@ -3,6 +3,7 @@ output:
   github_document:
     includes:
       in_header: header.md
+      after_body: doc_suffix.md
 ---
 
 ```{r, echo = FALSE}
