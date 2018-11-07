@@ -1,13 +1,15 @@
 <!DOCTYPE html>
 <html>
 <head>
+
 <style>
 hr { 
-    color: #34AFF1;
-    background-color: #34AFF1;
+    color: #DA8A25;
+    background-color: #9BA8AF;
     height: 5px;
 } 
 </style>
+
 </head>
 <body>
 
