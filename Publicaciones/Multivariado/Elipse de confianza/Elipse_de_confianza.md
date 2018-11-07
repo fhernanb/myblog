@@ -1,9 +1,30 @@
-¿Cómo se construye una elipse de confianza para una normal bivariada?
-================
+
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+hr { 
+    color: #34AFF1;
+    background-color: #34AFF1;
+    height: 5px;
+} 
+</style>
+</head>
+<body>
+
+
 
 <hr>
-<img src="https://raw.githubusercontent.com/fhernanb/fhernanb.github.io/master/docs/logo_unal_color.png" alt="drawing" width="200"/>
+
+<img src="https://raw.githubusercontent.com/fhernanb/fhernanb.github.io/master/imagenes/logounal.png" alt="drawing" width="200"/>
+
 <hr>
+
+</body>
+</html>
+
+¿Cómo se construye una elipse de confianza para una normal bivariada?
+=====================================================================
 
 Existen varias funciones para dibujar elipses de confianza pero en esta publicación vamos a mostar la utilidad de la función `ellipse` del paquete [ellipse](https://cran.r-project.org/web/packages/ellipse/index.html).
 
@@ -52,12 +73,12 @@ require(MASS)
 dt <- mvrnorm(n=1000, mu=centro, Sigma)
 head(dt)  # para ver las primeras lineas
 ##          [,1]     [,2]
-## [1,] 67.10294 143.1188
-## [2,] 72.67089 199.5209
-## [3,] 71.34295 170.9011
-## [4,] 62.90255 166.0484
-## [5,] 66.23096 134.5377
-## [6,] 64.22221 116.8886
+## [1,] 72.44453 176.6612
+## [2,] 73.81056 198.2517
+## [3,] 69.18736 138.4243
+## [4,] 68.83848 187.5725
+## [5,] 66.58475 186.8611
+## [6,] 73.43263 203.8511
 ```
 
 Para crear el diagrama de dispersión y superponer la elipse usamos el siguiente código.
@@ -74,10 +95,10 @@ Para determinar el porcentaje de puntos que están dentro de la elipse podemos u
 ``` r
 d <- mahalanobis(x=dt, center=centro, cov=Sigma)
 mean(d <= qchisq(p=0.95, df=2))
-## [1] 0.952
+## [1] 0.954
 ```
 
-Vemos que 95.2% de los puntos están dentro lo cual es un valor muy cercano al valor nominal de la elipse de 95%.
+Vemos que 95.4% de los puntos están dentro lo cual es un valor muy cercano al valor nominal de la elipse de 95%.
 
 Por último vamos a dibujar los puntos que están por dentro de la elipse con color azul y los que están por fuera con color rojo.
 

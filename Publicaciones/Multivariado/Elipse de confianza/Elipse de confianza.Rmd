@@ -1,5 +1,4 @@
 ---
-title: "¿Cómo se construye una elipse de confianza para una normal bivariada?"
 output:
   github_document:
     includes:
@@ -9,6 +8,8 @@ output:
 ```{r, echo = FALSE}
 knitr::opts_chunk$set(collapse=TRUE, comment="##", fig.retina=2, fig.path = "MyFigs/Figure-")
 ```
+
+# ¿Cómo se construye una elipse de confianza para una normal bivariada?
 
 Existen varias funciones para dibujar elipses de confianza pero en esta publicación vamos a mostar la utilidad de la función `ellipse` del paquete [ellipse](https://cran.r-project.org/web/packages/ellipse/index.html).
 
