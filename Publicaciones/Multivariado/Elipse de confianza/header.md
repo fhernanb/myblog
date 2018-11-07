@@ -1,19 +1,3 @@
-<!DOCTYPE html>
-<html>
-<head>
-
-<style>
-hr { 
-    color: #DA8A25;
-    background-color: #9BA8AF;
-    height: 5px;
-} 
-</style>
-
-</head>
-<body>
-
-
 
 <hr>
 
@@ -21,5 +5,4 @@ hr {
 
 <hr>
 
-</body>
-</html>
+
