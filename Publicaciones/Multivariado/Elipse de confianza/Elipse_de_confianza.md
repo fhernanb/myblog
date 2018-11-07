@@ -3,7 +3,6 @@
 
 <img src="https://raw.githubusercontent.com/fhernanb/fhernanb.github.io/master/imagenes/logounal.png" alt="logounal" width="200">
 
-
 <hr>
 
 ¿Cómo se construye una elipse de confianza para una normal bivariada?
@@ -56,12 +55,12 @@ require(MASS)
 dt <- mvrnorm(n=1000, mu=centro, Sigma)
 head(dt)  # para ver las primeras lineas
 ##          [,1]     [,2]
-## [1,] 76.46627 232.2837
-## [2,] 69.93279 160.3398
-## [3,] 71.72915 170.7323
-## [4,] 70.66563 158.8329
-## [5,] 71.28302 178.1621
-## [6,] 73.61656 184.6163
+## [1,] 71.55371 170.3362
+## [2,] 70.76903 155.6034
+## [3,] 68.77607 221.2328
+## [4,] 66.55037 174.9372
+## [5,] 70.78160 185.2613
+## [6,] 68.15984 130.2109
 ```
 
 Para crear el diagrama de dispersión y superponer la elipse usamos el siguiente código.
@@ -78,10 +77,10 @@ Para determinar el porcentaje de puntos que están dentro de la elipse podemos u
 ``` r
 d <- mahalanobis(x=dt, center=centro, cov=Sigma)
 mean(d <= qchisq(p=0.95, df=2))
-## [1] 0.94
+## [1] 0.949
 ```
 
-Vemos que 94% de los puntos están dentro lo cual es un valor muy cercano al valor nominal de la elipse de 95%.
+Vemos que 94.9% de los puntos están dentro lo cual es un valor muy cercano al valor nominal de la elipse de 95%.
 
 Por último vamos a dibujar los puntos que están por dentro de la elipse con color azul y los que están por fuera con color rojo.
 
