@@ -1,5 +1,5 @@
 ---
-title: Prueba
+title: Nombre de la publicación
 author: Freddy Hernández
 date: '`r format(Sys.Date(), "%Y-%B-%d")`'
 output:
@@ -13,7 +13,7 @@ output:
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## R Markdown
+## Introducción
 Esta es mi prueba de ecuaciones $E = mc^2$.
 
 $$\begin{array}{ccc}
@@ -25,17 +25,10 @@ x_{21} & x_{22} & x_{23}
 summary(rnorm(n=100))
 ```
 
-
 ```{r pressure, echo=FALSE}
-hist(rnorm(100))
+hist(x=rnorm(100), breaks=5, col=1:5)
 ```
 
-## Quarterly Results {.tabset}
+## Sección 1
 
-### By Product
-
-(tab content)
-
-### By Region
-
-(tab content)
+## Sección 2
