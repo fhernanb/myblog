@@ -1,14 +1,18 @@
 ---
+title: Simulación de modelos mixtos
+author: Freddy Hernández
+date: '`r format(Sys.Date(), "%Y-%B-%d")`'
 output:
-  github_document:
+  html_document:
+    theme: united
+    highlight: pygments
     includes:
       in_header: header.md
       after_body: doc_suffix.md
 ---
 
-```{r, echo = FALSE}
-knitr::opts_chunk$set(collapse=FALSE, comment="##", fig.retina=2, 
-                      fig.path = "MyFigs/Figure-")
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
 ```
 
 ## Introducción
