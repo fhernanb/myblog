@@ -4,10 +4,7 @@ author: Freddy Hernández
 date: March 22, 2005
 output:
   html_document:
-    theme: united
-    highlight: tango
-    mathjax: local
-    self_contained: false
+    keep_md: TRUE
     includes:
       in_header: header.md
       after_body: doc_suffix.md
