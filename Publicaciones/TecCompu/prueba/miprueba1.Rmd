@@ -5,7 +5,7 @@ date: '`r format(Sys.Date(), "%Y-%B-%d")`'
 output:
   html_document:
     theme: united
-    highlight: zenburn
+    highlight: pygments
     includes:
       in_header: header.md
       after_body: doc_suffix.md
