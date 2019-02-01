@@ -1,10 +1,9 @@
 ---
-title: "una pruebita"
-author: "Mi nombre completo"
-date: "1 February 2019"
-output: 
+output:
   html_document:
-    keep_md: true
+    includes:
+      in_header: header.md
+      after_body: doc_suffix.md
 ---
 
 ```{r setup, include=FALSE}
@@ -12,7 +11,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 ## R Markdown
-Esta es mi prueba
+Esta es mi prueba de ecuaciones $E = mc^2$.
 
 $$\begin{array}{ccc}
 x_{11} & x_{12} & x_{13}\\
