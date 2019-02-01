@@ -89,9 +89,10 @@ dt[1:15, ]
 
 Ajustemos el modelo.
 ```{r}
+colores <- c("#00004080", "#0063FF80", "#13F24080", "#FFE20180", "#FF330080")
 mod <- lm(y ~ x, data=dt)
 c(mod$coef, summary(mod)$sigma)
-with(dt, plot(y ~ x, pch=20, col=grupo, cex=3))
+with(dt, plot(y ~ x, pch=20, col=colores, cex=3))
 abline(mod)
 ```
 
@@ -122,9 +123,10 @@ coef(mod1)
 
 Para dibujar los modelos
 ```{r}
+colores <- c("#00004080", "#0063FF80", "#13F24080", "#FFE20180", "#FF330080")
 coef <- coef(mod1)
 with(dt, plot(y ~ x, pch=20, col=grupo, cex=3))
-for (i in 1:5) abline(a=coef[i, 1], b=coef[i, 2], col=i)
+for (i in 1:5) abline(a=coef[i, 1], b=coef[i, 2], col=colores[i])
 ```
 
 ## Simulando datos con pendiente aleatoria
@@ -169,7 +171,7 @@ Para dibujar los modelos
 ```{r}
 coef <- coef(mod2)
 with(dt, plot(y ~ x, pch=20, col=grupo, cex=3))
-for (i in 1:5) abline(a=coef[i, 1], b=coef[i, 2], col=i)
+for (i in 1:5) abline(a=coef[i, 1], b=coef[i, 2], col=colores[i])
 ```
 
 ## Simulando datos con intercepto y pendiente aleatoria
@@ -221,5 +223,5 @@ Para dibujar los modelos
 ```{r}
 coef <- coef(mod3)
 with(dt, plot(y ~ x, pch=20, col=grupo, cex=3))
-for (i in 1:5) abline(a=coef[i, 1], b=coef[i, 2], col=i)
+for (i in 1:5) abline(a=coef[i, 1], b=coef[i, 2], col=colores[i])
 ```
