@@ -1,32 +1,33 @@
-una pruebita
-================
-Mi nombre completo
-1 February 2019
+---
+title: "una pruebita"
+author: "Mi nombre completo"
+date: "1 February 2019"
+output: 
+  html_document:
+    keep_md: true
+---
 
-R Markdown
-----------
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
 
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+## R Markdown
+Esta es mi prueba
 
-``` r
-summary(cars)
+$$\begin{array}{ccc}
+x_{11} & x_{12} & x_{13}\\
+x_{21} & x_{22} & x_{23}
+\end{array}$$
+
+
+```r
+summary(rnorm(n=100))
 ```
 
-    ##      speed           dist       
-    ##  Min.   : 4.0   Min.   :  2.00  
-    ##  1st Qu.:12.0   1st Qu.: 26.00  
-    ##  Median :15.0   Median : 36.00  
-    ##  Mean   :15.4   Mean   : 42.98  
-    ##  3rd Qu.:19.0   3rd Qu.: 56.00  
-    ##  Max.   :25.0   Max.   :120.00
+```
+##     Min.  1st Qu.   Median     Mean  3rd Qu.     Max. 
+## -2.12827 -0.56162  0.11123  0.08095  0.65633  2.61060
+```
 
-Including Plots
----------------
 
-You can also embed plots, for example:
+![](dfsd_files/figure-html/pressure-1.png)<!-- -->
 
-![](dfsd_files/figure-markdown_github/pressure-1.png)
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
