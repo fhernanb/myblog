@@ -1,10 +1,12 @@
 ---
-title: "Analysis of Contributions to PubMed Commons"
-author: "Neil Saunders"
-date: "`r Sys.time()`"
-output: 
-  github_document: 
-    toc: yes
+title: Prueba
+author: Freddy Hernández
+date: Febrero 1, 2019
+output:
+  html_document:
+    includes:
+      in_header: header.md
+      after_body: doc_suffix.md
 ---
 
 ```{r setup, include=FALSE}
