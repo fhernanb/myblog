@@ -4,6 +4,8 @@ author: Freddy Hernández
 date: '`r format(Sys.Date(), "%Y-%B-%d")`'
 output:
   html_document:
+    theme: united
+    highlight: tango
     includes:
       in_header: header.md
       after_body: doc_suffix.md
