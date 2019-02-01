@@ -41,7 +41,7 @@ x &\sim Uniforme[1, 9]
 Con el siguiente código se simula el conjunto de datos de interés.
 ```{r}
 n <- 50
-x <- sample(1:9, size=n, replace=TRUE)
+x <- sample(1:9, size=n, replace=TRUE) # Uniforme discreta [1, 9]
 desvi <- 1
 media <- 59 + 1 * x
 y <- rnorm(n=n, mean=media, sd=desvi)
@@ -55,7 +55,7 @@ plot(y ~ x)
 Ajustemos un modelo para recuperar el vector de parámetros parámetros $\boldsymbol{\Theta}$.
 ```{r}
 mod <- lm(y ~ x)
-c(mod$coef, summary(mod)$sigma)
+c(mod$coef, sigma=summary(mod)$sigma)
 ```
 
 De la salida anterior vemos que vector de parámetros estimado está cerca de $\boldsymbol{\Theta}=(\beta_0=59, \beta_1=1, \sigma=1)^\top$.
@@ -66,3 +66,160 @@ plot(y ~ x, pch=20)
 abline(mod)
 ```
 
+## Simulando datos con intercepto aleatorio
+Con el siguiente código se simula un conjunto de datos como los deseados.
+
+```{r}
+sd_b0 <- 10
+g <- 5
+ni <- 10
+desvi <- 1
+
+grupo <- rep(1:5, each=ni)
+n <- g * ni
+x <- sample(1:9, size=n, replace=TRUE)
+b0 <- rnorm(n=g, mean=0, sd=sd_b0)
+b0_rep <- rep(b0, each=ni)
+media <- 59 + 1 * x + b0_rep
+y <- rnorm(n=n, mean=media, sd=desvi)
+
+dt <- data.frame(grupo=grupo, x=x, y=y, b0_rep)
+dt[1:15, ]
+```
+
+Ajustemos el modelo.
+```{r}
+mod <- lm(y ~ x, data=dt)
+c(mod$coef, summary(mod)$sigma)
+with(dt, plot(y ~ x, pch=20, col=grupo, cex=3))
+abline(mod)
+```
+
+
+Ajustemos el modelo usando la función `lme` del paquete `nlme`.
+
+```{r}
+library(nlme)
+mod1 <- lme(y ~ x, random = ~ 1 | grupo, data=dt)
+summary(mod1)
+```
+
+Para recuperar las predicciones de los interceptos aleatorios y compararlas con los verdaderos $b_{0i}$ se puede usar:
+
+```{r}
+cbind(ranef(mod1), b0)
+```
+
+Para ver los efectos fijos $\beta_0$ y $\beta_1$
+```{r}
+fixef(mod1)
+```
+
+Para ver los elementos del modelo $\hat{\mu}_{ij} = \hat{\beta}_0 + \hat{\beta}_1 x_{ij} + \tilde{b}_{0i}$
+```{r}
+coef(mod1)
+```
+
+Para dibujar los modelos
+```{r}
+coef <- coef(mod1)
+with(dt, plot(y ~ x, pch=20, col=grupo, cex=3))
+for (i in 1:5) abline(a=coef[i, 1], b=coef[i, 2], col=i)
+```
+
+## Simulando datos con pendiente aleatoria
+Con el siguiente código se simula un conjunto de datos como los deseados.
+
+```{r}
+sd_b1 <- 10
+g <- 5
+ni <- 10
+desvi <- 1
+
+grupo <- rep(1:5, each=ni)
+n <- g * ni
+x <- sample(1:9, size=n, replace=TRUE)
+b1 <- rnorm(n=g, mean=0, sd=sd_b0)
+b1_rep <- rep(b0, each=ni)
+media <- 59 + 1 * x + b1_rep * x
+y <- rnorm(n=n, mean=media, sd=desvi)
+
+dt <- data.frame(grupo=grupo, x=x, y=y, b1_rep)
+dt[1:15, ]
+```
+
+Dibujemos los datos simulados.
+```{r}
+with(dt, plot(y ~ x, pch=20, col=grupo, cex=3))
+```
+
+Ajustemos el modelo usando la función `lme` del paquete `nlme`.
+
+```{r}
+mod2 <- lme(y ~ x, random = ~ -1 + x | grupo, data=dt)
+summary(mod2)
+```
+
+Para ver los elementos del modelo $\hat{\mu}_{ij} = \hat{\beta}_0 + \hat{\beta}_1 x_{ij} + \tilde{b}_{1i} x_{ij}$
+```{r}
+coef(mod2)
+```
+
+Para dibujar los modelos
+```{r}
+coef <- coef(mod2)
+with(dt, plot(y ~ x, pch=20, col=grupo, cex=3))
+for (i in 1:5) abline(a=coef[i, 1], b=coef[i, 2], col=i)
+```
+
+## Simulando datos con intercepto y pendiente aleatoria
+Con el siguiente código se simula un conjunto de datos como los deseados.
+
+```{r}
+
+```
+
+```{r}
+g <- 5
+ni <- 10
+desvi <- 1
+
+library(MASS)
+mu <- c(0, 0)                               # Mean vector
+Sigma <- matrix(c(15, -2, -2, 5), ncol=2)  # Covariance matrix
+b <- mvrnorm(n=g, mu=mu, Sigma=Sigma)
+b_rep <- b[rep(1:nrow(b), each=ni), ]
+
+grupo <- rep(1:5, each=ni)
+n <- g * ni
+x <- sample(1:9, size=n, replace=TRUE)
+media <- 59 + 1 * x + b_rep[, 1] + b_rep[, 2] * x
+y <- rnorm(n=n, mean=media, sd=desvi)
+
+dt <- data.frame(grupo=grupo, x=x, y=y, b0=b_rep[, 1], b1=b_rep[, 2])
+dt[1:15, ]
+```
+
+Dibujemos los datos simulados.
+```{r}
+with(dt, plot(y ~ x, pch=20, col=grupo, cex=3))
+```
+
+Ajustemos el modelo usando la función `lme` del paquete `nlme`.
+
+```{r}
+mod3 <- lme(y ~ x, random = ~ 1 + x | grupo, data=dt)
+summary(mod3)
+```
+
+Para ver los elementos del modelo $\hat{\mu}_{ij} = \hat{\beta}_0 + \hat{\beta}_1 x_{ij} + \tilde{b}_{0i} + \tilde{b}_{1i} x_{ij}$
+```{r}
+coef(mod3)
+```
+
+Para dibujar los modelos
+```{r}
+coef <- coef(mod3)
+with(dt, plot(y ~ x, pch=20, col=grupo, cex=3))
+for (i in 1:5) abline(a=coef[i, 1], b=coef[i, 2], col=i)
+```
