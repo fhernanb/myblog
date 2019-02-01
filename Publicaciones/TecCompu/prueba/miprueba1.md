@@ -4,18 +4,13 @@ author: Freddy Hernández
 date: March 22, 2005
 output:
   html_document:
-    theme: united
-    highlight: tango
-    mathjax: local
-    self_contained: false
+    keep_md: TRUE
     includes:
       in_header: header.md
       after_body: doc_suffix.md
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-```
+
 
 ## R Markdown
 Esta es mi prueba de ecuaciones $E = mc^2$.
@@ -25,14 +20,18 @@ x_{11} & x_{12} & x_{13}\\
 x_{21} & x_{22} & x_{23}
 \end{array}$$
 
-```{r cars}
+
+```r
 summary(rnorm(n=100))
 ```
 
-
-```{r pressure, echo=FALSE}
-hist(rnorm(100))
 ```
+##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+## -3.1296 -0.7494 -0.1606 -0.1317  0.6217  2.3055
+```
+
+
+![](miprueba1_files/figure-html/pressure-1.png)<!-- -->
 
 ## Quarterly Results {.tabset}
 
