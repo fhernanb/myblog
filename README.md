@@ -1,4 +1,6 @@
-![](images/cabezote.png)
+<p align="center"> 
+<img src="images/cabezote.png" alt="" width="500" height="600">
+</p>
 
 # Bienvienido
 
