@@ -286,6 +286,10 @@ for (i in 1:5) abline(a=coef[i, 1], b=coef[i, 2], col=colores[i])
 ```
 
 ## Tarea
+<div class="alert alert-dismissible alert-info">
 1. ¿Es posible que en un modelo mixto $y$ se distribuya no normal?
 1. Consultar en la web ejemplos sencillos (con una sola covariable $x$) de modelos mixtos en los cuales la variable respuesta siga una distribución Poisson, binomial y gamma.
 3. Para cada uno de los ejemplos encontrados, simular datos usando la estructura del ejemplo y luego estimar los parámetros.
+</div>
+
+
