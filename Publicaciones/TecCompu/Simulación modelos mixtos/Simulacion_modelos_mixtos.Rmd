@@ -16,7 +16,7 @@ knitr::opts_chunk$set(echo = TRUE, fig.width=6, fig.height=5)
 ```
 
 ## Introducción
-En esta publicación se mostrará cómo simular datos de un:  
+En esta publicación se mostrará al lector cómo simular datos de modelos lineales y la forma de estimar los parámetros. Los modelos a simular son:
 
 1. Modelo lineal clásico,  
 2. Modelo lineal con intercepto aleatorio,  
@@ -24,7 +24,7 @@ En esta publicación se mostrará cómo simular datos de un:
 4. Modelo lineal con intercepto y pendiente aleatoria.  
 
 ## Ilustración de un modelo mixto
-Recomiendo al lector que visite el enlace mostrado abajo para que vea una ilustración muy interesante de modelos mixtos.
+Se recomienda al lector que visite el enlace mostrado abajo para que vea una ilustración muy interesante de modelos mixtos. Los parámetros usados en las simulaciones fueron inspirados en la ilustración.
 
 http://mfviz.com/hierarchical-models/
 
@@ -42,144 +42,176 @@ Con el siguiente código se simula el conjunto de datos de interés.
 ```{r}
 n <- 50
 x <- sample(1:9, size=n, replace=TRUE) # Uniforme discreta [1, 9]
-desvi <- 1
+sig <- 1
 media <- 59 + 1 * x
-y <- rnorm(n=n, mean=media, sd=desvi)
+y <- rnorm(n=n, mean=media, sd=sig)
 ```
 
-Dibujemos los datos simulados para ver el resultado.
+Vamos a construir un diagrama de dispersión para los datos simulados.
 ```{r}
 plot(y ~ x)
 ```
 
 Ajustemos un modelo para recuperar el vector de parámetros parámetros $\boldsymbol{\Theta}$.
 ```{r}
-mod <- lm(y ~ x)
-c(mod$coef, sigma=summary(mod)$sigma)
+mod1 <- lm(y ~ x)
+c(mod1$coef, sigma=summary(mod1)$sigma)
 ```
 
 De la salida anterior vemos que vector de parámetros estimado está cerca de $\boldsymbol{\Theta}=(\beta_0=59, \beta_1=1, \sigma=1)^\top$.
 
 Vamos a agregar la líneal del modelo ajustado.
 ```{r}
-plot(y ~ x, pch=20)
-abline(mod)
+plot(y ~ x)
+abline(mod1, lty='dashed', lwd=2)
 ```
 
 ## Simulando datos con intercepto aleatorio
-Con el siguiente código se simula un conjunto de datos como los deseados.
+Suponga que ahora queremos simular $n_i=10$ observaciones para $n_g=5$ grupos (en total 50) usando el siguiente modelo mixto con _intercepto aleatorio_ con vector de parámetros $\boldsymbol{\Theta}=(\beta_0=59, \beta_1=1, \sigma=1, \sigma_{b0}=10)^\top$.
+
+\begin{align*} 
+y_{ij} &\sim N(\mu_{ij}, \sigma^2) \\ 
+\mu_{ij} &= 59 + 1 \, x_{ij} + b_{0i} \\
+\sigma &= 1 \\
+b_0 &\sim N(0, \sigma_{b0}) \\
+x &\sim Uniforme[1, 9] \\
+i &= 1, 2, \ldots, n_g, j=1, 2, \ldots, n_i
+\end{align*}
 
 ```{r}
+sig <- 1
 sd_b0 <- 10
-g <- 5
-ni <- 10
-desvi <- 1
 
-grupo <- rep(1:5, each=ni)
-n <- g * ni
+ng <- 5        # número de grupos
+ni <- 10       # número de obs por grupo
+n <- ng * ni   # número de obs total
+
+grupo <- rep(1:5, each=ni) # Variable de agrupación
+
 x <- sample(1:9, size=n, replace=TRUE)
-b0 <- rnorm(n=g, mean=0, sd=sd_b0)
-b0_rep <- rep(b0, each=ni)
+b0 <- rnorm(n=ng, mean=0, sd=sd_b0)  # Vector con los cinco b0
+b0_rep <- rep(b0, each=ni)           # Vector con los b0 repetidos
 media <- 59 + 1 * x + b0_rep
-y <- rnorm(n=n, mean=media, sd=desvi)
+y <- rnorm(n=n, mean=media, sd=sig)
 
-dt <- data.frame(grupo=grupo, x=x, y=y, b0_rep)
+dt <- data.frame(grupo=grupo, x=x, b0_rep, y=y)
+```
+
+Exploremos lo que hay dentro de `dt`.
+```{r}
 dt[1:15, ]
 ```
 
-Ajustemos el modelo.
+Vamos a construir un diagrama de dispersión para los datos simulados.
 ```{r}
 colores <- c("#00004080", "#0063FF80", "#13F24080", "#FFE20180", "#FF330080")
-mod <- lm(y ~ x, data=dt)
-c(mod$coef, summary(mod)$sigma)
-with(dt, plot(y ~ x, pch=20, col=colores, cex=3))
-abline(mod)
+with(dt, plot(y ~ x, pch=20, col=colores[dt$grupo], cex=3))
 ```
 
-
-Ajustemos el modelo usando la función `lme` del paquete `nlme`.
-
+Ajustemos un modelo para recuperar el vector de parámetros parámetros $\boldsymbol{\Theta}$, para esto usemos la función `lme` del paquete `nlme`. 
 ```{r}
 library(nlme)
-mod1 <- lme(y ~ x, random = ~ 1 | grupo, data=dt)
-summary(mod1)
-```
-
-Para recuperar las predicciones de los interceptos aleatorios y compararlas con los verdaderos $b_{0i}$ se puede usar:
-
-```{r}
-cbind(ranef(mod1), b0)
-```
-
-Para ver los efectos fijos $\beta_0$ y $\beta_1$
-```{r}
-fixef(mod1)
-```
-
-Para ver los elementos del modelo $\hat{\mu}_{ij} = \hat{\beta}_0 + \hat{\beta}_1 x_{ij} + \tilde{b}_{0i}$
-```{r}
-coef(mod1)
-```
-
-Para dibujar los modelos
-```{r}
-colores <- c("#00004080", "#0063FF80", "#13F24080", "#FFE20180", "#FF330080")
-coef <- coef(mod1)
-with(dt, plot(y ~ x, pch=20, col=grupo, cex=3))
-for (i in 1:5) abline(a=coef[i, 1], b=coef[i, 2], col=colores[i])
-```
-
-## Simulando datos con pendiente aleatoria
-Con el siguiente código se simula un conjunto de datos como los deseados.
-
-```{r}
-sd_b1 <- 10
-g <- 5
-ni <- 10
-desvi <- 1
-
-grupo <- rep(1:5, each=ni)
-n <- g * ni
-x <- sample(1:9, size=n, replace=TRUE)
-b1 <- rnorm(n=g, mean=0, sd=sd_b0)
-b1_rep <- rep(b0, each=ni)
-media <- 59 + 1 * x + b1_rep * x
-y <- rnorm(n=n, mean=media, sd=desvi)
-
-dt <- data.frame(grupo=grupo, x=x, y=y, b1_rep)
-dt[1:15, ]
-```
-
-Dibujemos los datos simulados.
-```{r}
-with(dt, plot(y ~ x, pch=20, col=grupo, cex=3))
-```
-
-Ajustemos el modelo usando la función `lme` del paquete `nlme`.
-
-```{r}
-mod2 <- lme(y ~ x, random = ~ -1 + x | grupo, data=dt)
+mod2 <- lme(y ~ x, random = ~ 1 | grupo, data=dt)
 summary(mod2)
 ```
 
-Para ver los elementos del modelo $\hat{\mu}_{ij} = \hat{\beta}_0 + \hat{\beta}_1 x_{ij} + \tilde{b}_{1i} x_{ij}$
+De la tabla anterior vemos que el vector de parámetros estimado $\hat{\boldsymbol{\Theta}}$ no está tan alejado de $\boldsymbol{\Theta}$.
+
+Los efectos fijos estimados $\beta_0$ y $\beta_1$ se obtienen así:
+```{r}
+fixef(mod2)
+```
+
+Vamos a recuperar las predicciones de los 5 interceptos aleatorios (efectos aleatorios) y a compararlas con los verdaderos $b_{0}$.
+```{r}
+cbind(ranef(mod2), b0)
+```
+
+De la tabla anterior vemos que los $\tilde{b_{0}}$ son cercanos a los verdaderos $b_{0}$ simulados.
+
+Usando los efectos fijos y los efectos aleatorios podemos obtener las expresiones ($\hat{\beta}_0 + \hat{\beta}_1 x_{ij} + b_{0i}$) para los modelos de cada grupo así:
 ```{r}
 coef(mod2)
 ```
 
-Para dibujar los modelos
+Usando la información anterior se puede dibujar el modelo ajustado para cada grupo.
 ```{r}
 coef <- coef(mod2)
-with(dt, plot(y ~ x, pch=20, col=grupo, cex=3))
+with(dt, plot(y ~ x, pch=20, col=colores[dt$grupo], cex=3))
+for (i in 1:5) abline(a=coef[i, 1], b=coef[i, 2], col=colores[i])
+```
+
+## Simulando datos con pendiente aleatoria
+Suponga que ahora queremos simular $n_i=10$ observaciones para $n_g=5$ grupos (en total 50) usando el siguiente modelo mixto con _pendiente aleatoria_ con vector de parámetros $\boldsymbol{\Theta}=(\beta_0=59, \beta_1=1, \sigma=1, \sigma_{b1}=5)^\top$.
+
+\begin{align*} 
+y_{ij} &\sim N(\mu_{ij}, \sigma^2) \\ 
+\mu_{ij} &= 59 + 1 \, x_{ij} + b_{1i} \, x_{ij} \\
+\sigma &= 1 \\
+b_1 &\sim N(0, \sigma_{b1}) \\
+x &\sim Uniforme[1, 9] \\
+i &= 1, 2, \ldots, n_g, \quad j=1, 2, \ldots, n_i
+\end{align*}
+
+```{r}
+sig <- 1
+sd_b1 <- 5
+
+ng <- 5
+ni <- 10
+
+grupo <- rep(1:5, each=ni)
+n <- ng * ni
+x <- sample(1:9, size=n, replace=TRUE)
+b1 <- rnorm(n=ng, mean=0, sd=sd_b0)
+b1_rep <- rep(b0, each=ni)
+media <- 59 + 1 * x + b1_rep * x
+y <- rnorm(n=n, mean=media, sd=sig)
+
+dt <- data.frame(grupo=grupo, x=x, b1_rep, y=y)
+```
+
+Exploremos lo que hay dentro de `dt`.
+```{r}
+dt[1:15, ]
+```
+
+Vamos a construir un diagrama de dispersión para los datos simulados.
+```{r}
+with(dt, plot(y ~ x, pch=20, col=colores[dt$grupo], cex=3))
+```
+
+Ajustemos un modelo para recuperar el vector de parámetros parámetros $\boldsymbol{\Theta}$, para esto usemos la función `lme` del paquete `nlme`.
+```{r}
+mod3 <- lme(y ~ x, random = ~ -1 + x | grupo, data=dt)
+summary(mod3)
+```
+
+Los efectos fijos estimados $\beta_0$ y $\beta_1$ se obtienen así:
+```{r}
+fixef(mod3)
+```
+
+Vamos a recuperar las predicciones de las 5 pendientes aleatorios (efectos aleatorios) y a compararlas con los verdaderos $b_{1}$.
+```{r}
+cbind(ranef(mod3), b1)
+```
+
+Usando los efectos fijos y los efectos aleatorios podemos obtener las expresiones ($\hat{\beta}_0 + \hat{\beta}_1 x_{ij} + b_{1i} x_{ij}$) para los modelos de cada grupo así:
+```{r}
+coef(mod3)
+```
+
+Usando la información anterior se puede dibujar el modelo ajustado para cada grupo.
+```{r}
+coef <- coef(mod3)
+with(dt, plot(y ~ x, pch=20, col=colores[dt$grupo], cex=3))
 for (i in 1:5) abline(a=coef[i, 1], b=coef[i, 2], col=colores[i])
 ```
 
 ## Simulando datos con intercepto y pendiente aleatoria
 Con el siguiente código se simula un conjunto de datos como los deseados.
 
-```{r}
-
-```
 
 ```{r}
 g <- 5
