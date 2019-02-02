@@ -35,7 +35,7 @@ Suponga que queremos simular $n=50$ observaciones del siguiente modelo con vecto
 
 \begin{align*} 
 y_i &\sim \mathcal{N}(\mu_i, \sigma^2) \\ 
-\mu_i &= 59 + 1 x_i \\
+\mu_i &= 59 + 1 \, x_i \\
 \sigma &= 1 \\
 x &\sim Uniforme[1, 9]
 \end{align*}
