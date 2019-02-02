@@ -1,5 +1,5 @@
 <p align="center"> 
-<img src="images/cabezote.png" alt="" width="500" height="600">
+<img src="images/cabezote.png" alt="" width="50%" height="50%">
 </p>
 
 # Bienvienido
