@@ -4,6 +4,8 @@ author: Freddy Hernández
 date: '`r format(Sys.Date(), "%Y-%B-%d")`'
 output:
   html_document:
+    toc: true
+    toc_depth: 2
     theme: united
     highlight: pygments
     includes:
@@ -60,7 +62,7 @@ c(mod1$coef, sigma=summary(mod1)$sigma)
 
 De la salida anterior vemos que vector de parámetros estimado está cerca de $\boldsymbol{\Theta}=(\beta_0=59, \beta_1=1, \sigma=1)^\top$.
 
-Vamos a agregar la líneal del modelo ajustado.
+Vamos a agregar la línea del modelo ajustado.
 ```{r}
 plot(y ~ x)
 abline(mod1, lty='dashed', lwd=2)
@@ -284,6 +286,6 @@ for (i in 1:5) abline(a=coef[i, 1], b=coef[i, 2], col=colores[i])
 ```
 
 ## Tarea
-1. ¿Es posible que en un modelo mixto $y$ se distribuya __no normal__?
+1. ¿Es posible que en un modelo mixto $y$ se distribuya _no normal_?
 1. Consultar en la web ejemplos sencillos (con una sola covariable $x$) de modelos mixtos en los cuales la variable respuesta siga una distribución Poisson, binomial y gamma.
 3. Para cada uno de los ejemplos encontrados, simular datos usando la estructura del ejemplo y luego estimar los parámetros.
