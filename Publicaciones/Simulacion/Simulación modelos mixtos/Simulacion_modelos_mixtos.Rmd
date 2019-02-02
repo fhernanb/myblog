@@ -6,7 +6,7 @@ output:
   html_document:
     toc: true
     toc_depth: 2
-    theme: united
+    theme: flatly
     highlight: pygments
     includes:
       in_header: header.md
@@ -69,13 +69,13 @@ abline(mod1, lty='dashed', lwd=2)
 ```
 
 ## Simulando datos con intercepto aleatorio
-Suponga que ahora queremos simular $n_i=10$ observaciones para $n_g=5$ grupos (en total 50) usando el siguiente modelo mixto con _intercepto aleatorio_ con vector de parámetros $\boldsymbol{\Theta}=(\beta_0=59, \beta_1=1, \sigma=1, \sigma_{b0}=10)^\top$.
+Suponga que ahora queremos simular $n_i=10$ observaciones para $n_g=5$ grupos (en total 50) usando el siguiente modelo mixto con intercepto aleatorio con vector de parámetros $\boldsymbol{\Theta}=(\beta_0=59, \beta_1=1, \sigma=1, \sigma_{b0}=10)^\top$.
 
 \begin{align*} 
 y_{ij} &\sim \mathcal{N}(\mu_{ij}, \sigma^2) \\ 
 \mu_{ij} &= 59 + 1 \, x_{ij} + b_{0i} \\
 \sigma &= 1 \\
-b_0 &\sim \mathcal{N}(0, \sigma_{b0}) \\
+b_0 &\sim \mathcal{N}(0, \sigma_{b0}^2) \\
 x &\sim Uniforme[1, 9] \\
 i &= 1, 2, \ldots, n_g \quad j=1, 2, \ldots, n_i
 \end{align*}
@@ -144,13 +144,13 @@ for (i in 1:5) abline(a=coef[i, 1], b=coef[i, 2], col=colores[i])
 ```
 
 ## Simulando datos con pendiente aleatoria
-Suponga que ahora queremos simular $n_i=10$ observaciones para $n_g=5$ grupos (en total 50) usando el siguiente modelo mixto con _pendiente aleatoria_ con vector de parámetros $\boldsymbol{\Theta}=(\beta_0=59, \beta_1=1, \sigma=1, \sigma_{b1}=5)^\top$.
+Suponga que ahora queremos simular $n_i=10$ observaciones para $n_g=5$ grupos (en total 50) usando el siguiente modelo mixto con pendiente aleatoria con vector de parámetros $\boldsymbol{\Theta}=(\beta_0=59, \beta_1=1, \sigma=1, \sigma_{b1}=5)^\top$.
 
 \begin{align*} 
 y_{ij} &\sim \mathcal{N}(\mu_{ij}, \sigma^2) \\ 
 \mu_{ij} &= 59 + 1 \, x_{ij} + b_{1i} \, x_{ij} \\
 \sigma &= 1 \\
-b_1 &\sim \mathcal{N}(0, \sigma_{b1}) \\
+b_1 &\sim \mathcal{N}(0, \sigma_{b1}^2) \\
 x &\sim Uniforme[1, 9] \\
 i &= 1, 2, \ldots, n_g, \quad j=1, 2, \ldots, n_i
 \end{align*}
@@ -213,7 +213,7 @@ for (i in 1:5) abline(a=coef[i, 1], b=coef[i, 2], col=colores[i])
 ```
 
 ## Simulando datos con intercepto y pendiente aleatoria
-Suponga que ahora queremos simular $n_i=10$ observaciones para $n_g=5$ grupos (en total 50) usando el siguiente modelo mixto con _intercepto y pendiente aleatoria_ con vector de parámetros $\boldsymbol{\Theta}=(\beta_0=59, \beta_1=1, \sigma=1, \sigma_{b0}=9, \sigma_{b0}=4, \sigma_{b01}=-2)^\top$.
+Suponga que ahora queremos simular $n_i=10$ observaciones para $n_g=5$ grupos (en total 50) usando el siguiente modelo mixto con intercepto y pendiente aleatoria con vector de parámetros $\boldsymbol{\Theta}=(\beta_0=59, \beta_1=1, \sigma=1, \sigma_{b0}=9, \sigma_{b0}=4, \sigma_{b01}=-2)^\top$.
 
 \begin{equation}
 \begin{split}
@@ -286,6 +286,6 @@ for (i in 1:5) abline(a=coef[i, 1], b=coef[i, 2], col=colores[i])
 ```
 
 ## Tarea
-1. ¿Es posible que en un modelo mixto $y$ se distribuya _no normal_?
+1. ¿Es posible que en un modelo mixto $y$ se distribuya no normal?
 1. Consultar en la web ejemplos sencillos (con una sola covariable $x$) de modelos mixtos en los cuales la variable respuesta siga una distribución Poisson, binomial y gamma.
 3. Para cada uno de los ejemplos encontrados, simular datos usando la estructura del ejemplo y luego estimar los parámetros.
