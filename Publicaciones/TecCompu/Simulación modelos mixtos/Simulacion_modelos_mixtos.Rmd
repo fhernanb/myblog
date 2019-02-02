@@ -32,7 +32,7 @@ http://mfviz.com/hierarchical-models/
 Suponga que queremos simular $n=50$ observaciones del siguiente modelo con vector de parámetros $\boldsymbol{\Theta}=(\beta_0=59, \beta_1=1, \sigma=1)^\top$.
 
 \begin{align*} 
-y_i &\sim N(\mu_i, \sigma^2) \\ 
+y_i &\sim \mathcal{N}(\mu_i, \sigma^2) \\ 
 \mu_i &= 59 + 1 x_i \\
 \sigma &= 1 \\
 x &\sim Uniforme[1, 9]
@@ -70,12 +70,12 @@ abline(mod1, lty='dashed', lwd=2)
 Suponga que ahora queremos simular $n_i=10$ observaciones para $n_g=5$ grupos (en total 50) usando el siguiente modelo mixto con _intercepto aleatorio_ con vector de parámetros $\boldsymbol{\Theta}=(\beta_0=59, \beta_1=1, \sigma=1, \sigma_{b0}=10)^\top$.
 
 \begin{align*} 
-y_{ij} &\sim N(\mu_{ij}, \sigma^2) \\ 
+y_{ij} &\sim \mathcal{N}(\mu_{ij}, \sigma^2) \\ 
 \mu_{ij} &= 59 + 1 \, x_{ij} + b_{0i} \\
 \sigma &= 1 \\
-b_0 &\sim N(0, \sigma_{b0}) \\
+b_0 &\sim \mathcal{N}(0, \sigma_{b0}) \\
 x &\sim Uniforme[1, 9] \\
-i &= 1, 2, \ldots, n_g, j=1, 2, \ldots, n_i
+i &= 1, 2, \ldots, n_g \quad j=1, 2, \ldots, n_i
 \end{align*}
 
 ```{r}
@@ -145,10 +145,10 @@ for (i in 1:5) abline(a=coef[i, 1], b=coef[i, 2], col=colores[i])
 Suponga que ahora queremos simular $n_i=10$ observaciones para $n_g=5$ grupos (en total 50) usando el siguiente modelo mixto con _pendiente aleatoria_ con vector de parámetros $\boldsymbol{\Theta}=(\beta_0=59, \beta_1=1, \sigma=1, \sigma_{b1}=5)^\top$.
 
 \begin{align*} 
-y_{ij} &\sim N(\mu_{ij}, \sigma^2) \\ 
+y_{ij} &\sim \mathcal{N}(\mu_{ij}, \sigma^2) \\ 
 \mu_{ij} &= 59 + 1 \, x_{ij} + b_{1i} \, x_{ij} \\
 \sigma &= 1 \\
-b_1 &\sim N(0, \sigma_{b1}) \\
+b_1 &\sim \mathcal{N}(0, \sigma_{b1}) \\
 x &\sim Uniforme[1, 9] \\
 i &= 1, 2, \ldots, n_g, \quad j=1, 2, \ldots, n_i
 \end{align*}
@@ -159,6 +159,7 @@ sd_b1 <- 5
 
 ng <- 5
 ni <- 10
+n <- ng * ni
 
 grupo <- rep(1:5, each=ni)
 n <- ng * ni
@@ -210,50 +211,79 @@ for (i in 1:5) abline(a=coef[i, 1], b=coef[i, 2], col=colores[i])
 ```
 
 ## Simulando datos con intercepto y pendiente aleatoria
-Con el siguiente código se simula un conjunto de datos como los deseados.
+Suponga que ahora queremos simular $n_i=10$ observaciones para $n_g=5$ grupos (en total 50) usando el siguiente modelo mixto con _intercepto y pendiente aleatoria_ con vector de parámetros $\boldsymbol{\Theta}=(\beta_0=59, \beta_1=1, \sigma=1, \sigma_{b0}=9, \sigma_{b0}=4, \sigma_{b01}=-2)^\top$.
 
+\begin{equation}
+\begin{split}
+y_{ij} &\sim \mathcal{N}(\mu_{ij}, \sigma^2), \\
+\mu_{ij} &= 59 + 1 \, x_{ij} + b_{0i} + b_{1i} \, x_{ij} \\
+\left (
+\begin{matrix}
+b_{0i} \\ b_{1i}
+\end{matrix} 
+\right ) &\sim 
+\mathcal{N}\left ( \left ( \begin{matrix}
+0 \\ 0
+\end{matrix} \right ),
+\left ( \begin{matrix}
+\sigma^2_{b0} & \sigma_{b01} \\ 
+\sigma_{b01} & \sigma^2_{b1}
+\end{matrix} \right )
+\right ) \\
+x &\sim Uniforme[1, 9] \\
+i &= 1, 2, \ldots, n_g \quad j=1, 2, \ldots, n_i
+\end{split}
+\end{equation}
 
 ```{r}
-g <- 5
+ng <- 5
 ni <- 10
-desvi <- 1
+n <- ng * ni
+
+sig <- 1
+
+sd_b0 <- 9     # Matriz de covarianzas de los efectos aleatorios
+sd_b1 <- 4
+sd_b0b1 <- -2
 
 library(MASS)
-mu <- c(0, 0)                               # Mean vector
-Sigma <- matrix(c(15, -2, -2, 5), ncol=2)  # Covariance matrix
-b <- mvrnorm(n=g, mu=mu, Sigma=Sigma)
+mu <- c(0, 0)
+Sigma <- matrix(c(sd_b0^2, sd_b0b1, sd_b0b1, sd_b1^2), ncol=2)
+b <- mvrnorm(n=ng, mu=mu, Sigma=Sigma)
 b_rep <- b[rep(1:nrow(b), each=ni), ]
 
 grupo <- rep(1:5, each=ni)
-n <- g * ni
 x <- sample(1:9, size=n, replace=TRUE)
 media <- 59 + 1 * x + b_rep[, 1] + b_rep[, 2] * x
-y <- rnorm(n=n, mean=media, sd=desvi)
+y <- rnorm(n=n, mean=media, sd=sig)
 
-dt <- data.frame(grupo=grupo, x=x, y=y, b0=b_rep[, 1], b1=b_rep[, 2])
+dt <- data.frame(grupo=grupo, x=x, b0=b_rep[, 1], b1=b_rep[, 2], y=y)
+```
+
+Exploremos lo que hay dentro de `dt`.
+```{r}
 dt[1:15, ]
 ```
 
-Dibujemos los datos simulados.
+Vamos a construir un diagrama de dispersión para los datos simulados.
 ```{r}
-with(dt, plot(y ~ x, pch=20, col=grupo, cex=3))
+with(dt, plot(y ~ x, pch=20, col=colores[dt$grupo], cex=3))
 ```
 
-Ajustemos el modelo usando la función `lme` del paquete `nlme`.
-
+Ajustemos un modelo para recuperar el vector de parámetros parámetros $\boldsymbol{\Theta}$, para esto usemos la función `lme` del paquete `nlme`.
 ```{r}
-mod3 <- lme(y ~ x, random = ~ 1 + x | grupo, data=dt)
-summary(mod3)
+mod4 <- lme(y ~ x, random = ~ 1 + x | grupo, data=dt)
+summary(mod4)
 ```
 
-Para ver los elementos del modelo $\hat{\mu}_{ij} = \hat{\beta}_0 + \hat{\beta}_1 x_{ij} + \tilde{b}_{0i} + \tilde{b}_{1i} x_{ij}$
+Al igual que en los ejemplos anteriores, se puede dibujar el modelo ajustado para cada grupo.
 ```{r}
-coef(mod3)
-```
-
-Para dibujar los modelos
-```{r}
-coef <- coef(mod3)
-with(dt, plot(y ~ x, pch=20, col=grupo, cex=3))
+coef <- coef(mod4)
+with(dt, plot(y ~ x, pch=20, col=colores[dt$grupo], cex=3))
 for (i in 1:5) abline(a=coef[i, 1], b=coef[i, 2], col=colores[i])
 ```
+
+## Tarea
+1. ¿Es posible que en un modelo mixto $y$ se distribuya __no normal__?
+1. Consultar en la web ejemplos sencillos (con una sola covariable $x$) de modelos mixtos en los cuales la variable respuesta siga una distribución Poisson, binomial y gamma.
+3. Para cada uno de los ejemplos encontrados, simular datos usando la estructura del ejemplo y luego estimar los parámetros.
